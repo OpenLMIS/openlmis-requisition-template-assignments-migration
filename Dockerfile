@@ -4,8 +4,6 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends postgresql-contrib \
   && rm -rf /var/lib/apt/lists/*
 
-COPY create_assignments.sh /
-COPY set_template_names.sh /
-COPY run_migration.sh /
+COPY migrate.sh /
 
-ENTRYPOINT ["/run_migration.sh"]
+ENTRYPOINT ["/migrate.sh"]
