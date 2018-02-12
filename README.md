@@ -4,7 +4,7 @@ Cross service migration of requisition template assignments
 
 ## Pre-requisites
 
-* Already using OpenLMIS 3.2.1.
+* Already using OpenLMIS 3.2.X.
 * Hosting OpenLMIS inside Docker with Docker Compose, and using PostgreSQL or AWS RDS as the database, with all OpenLMIS services using the same database instance.
 * Requires administrator-level server access.
 
