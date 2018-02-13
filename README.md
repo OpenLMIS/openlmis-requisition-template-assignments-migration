@@ -76,4 +76,4 @@ JIRA Ticket: [OLMIS-3929](https://openlmis.atlassian.net/browse/OLMIS-3929)
 
 ## Error reporting
 
-The script can be run only one time on the given database because in the second step it removes the `programId` column from the `requisition_templates` table which is used to match programs with templates. If there will be any error while the script will be executing please restore the database before next try.
+If the script is ran twice, it should not corrupt the data, since it does not modify the schema - we only update template name and recreate template assignments. Any additional data that was added in the meantime will be migrated.

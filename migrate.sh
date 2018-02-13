@@ -67,9 +67,6 @@ while IFS=, read -r template_id program_id ; do
   done < facility_type_ids.csv
 done < template_details.csv
 
-echo "Add step to remove unnecessary columns (the requisition database)"
-echo "ALTER TABLE requisition.requisition_templates DROP COLUMN programId;" >> migration.sql
-
 echo "Apply migration (the requisition database)"
 ${PSQL} -h ${REQUISITION_DATABASE_URL} -U ${REQUISITION_DATABASE_USER} < migration.sql
 

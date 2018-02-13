@@ -1,5 +1,5 @@
 version: "2"
 services:
     requisition-template-assignments-migration:
-        image: openlmis/requisition-template-assignments-migration:1.0.0
+        image: openlmis/requisition-template-assignments-migration:1.0.1
         env_file: .env
