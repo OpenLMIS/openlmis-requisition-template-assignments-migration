@@ -1,9 +1,6 @@
-FROM mdillon/postgis:9.6
+FROM openlmis/run-sql
 
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends postgresql-contrib \
-  && rm -rf /var/lib/apt/lists/*
+COPY migrate.sh /migrate.sh
+RUN chmod u+x /migrate.sh
 
-COPY migrate.sh /
-
-ENTRYPOINT ["/migrate.sh"]
+CMD /migrate.sh

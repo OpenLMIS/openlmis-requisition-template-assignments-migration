@@ -1,6 +1,6 @@
-# openlmis-requisition-template-assignments-migration
+# Requisition Template Migration (Cross-Service)
 
-Cross service migration of requisition template assignments
+Cross service migration of requisition template and assignments
 
 ## Pre-requisites
 
@@ -8,7 +8,7 @@ Cross service migration of requisition template assignments
 * Hosting OpenLMIS inside Docker with Docker Compose, and using PostgreSQL or AWS RDS as the database, with all OpenLMIS services using the same database instance.
 * Requires administrator-level server access.
 
-It is **strongly** suggested to run the migration on a staging/test server with a copy of production data first in order to verify the migration before running on production server
+It is **strongly** suggested to run the migration on a staging/test server with a copy of production data first in order to verify the migration before running on production server.
 
 ## Migration instructions
 
@@ -27,29 +27,22 @@ Pre-planning: Schedule downtime to perform the upgrade; do the upgrade on a Test
 
 ## Usage
 
-In order to use the first, you need the configuration file for it in your local working directory.
-In the top-level directory of this repository execute:
+This image is based off of openlmis/run-sql, and so the environment variables needed for that image are needed here. In particular, you need the configuration file found [here](https://github.com/OpenLMIS/openlmis-ref-distro/blob/master/settings-sample.env).
+
+Next simply run the migration script using Docker:
 
 ```bash
-cp sample-config/.env .
-```
-
-Then edit the file, so that it points to your databases. The script needs to connect to PostgreSQL database instances which OpenLMIS is using.
-
-Next simply run the migration script using Docker Compose:
-
-```bash
-docker-compose run requisition-template-assignments-migration
+docker run -it --rm --env-file settings.env openlmis/obscure-data
 ```
 
 That's it - the migration will run and give you output about its progress.
 
 ## Building
 
-The Docker image is built on Docker Hub. In order to build it locally, simply run the build script:
+The Docker image is built on Docker Hub. In order to build it locally, simply run:
 
 ```bash
-./util-scripts/build.sh
+docker build -t openlmis/requisition-template-migration .
 ```
 
 ## Script details
@@ -66,9 +59,7 @@ We match a requisition template with a program by `id` column from the `programs
 
 ### Step 2 - set default requisition template assignments
 
-In this step, we create default requisition template assignments to handle legacy requisitions. To match this requirement by default we assign each requisition template to all facility types that are in the database. After this step there should be X * Y records in the `requisition_template_assignments` table where X is equal to number of templates in the `requisition_templates` table and Y is equal to number of facility types.
-
-At the end of this step, we remove `programId` column from the `requisition_templates` because it is unnecessary.
+In this step, we create default requisition template assignments to handle new requisitions. To match this requirement by default we assign each active requisition template to all facility types that are in the database. After this step there should be X * Y records in the `requisition_template_assignments` table where X is equal to number of active templates in the `requisition_templates` table and Y is equal to number of facility types.
 
 See further information:
 
@@ -76,4 +67,4 @@ JIRA Ticket: [OLMIS-3929](https://openlmis.atlassian.net/browse/OLMIS-3929)
 
 ## Error reporting
 
-If the script is ran twice, it should not corrupt the data, since it does not modify the schema - we only update template name and recreate template assignments. Any additional data that was added in the meantime will be migrated.
+If the script is run twice, it should not corrupt the data, since it does not modify the schema - we only update template name and recreate template assignments. Any additional data that was added in the meantime will be migrated.
