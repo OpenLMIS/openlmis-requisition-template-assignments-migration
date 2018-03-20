@@ -32,7 +32,7 @@ This image is based off of openlmis/run-sql, and so the environment variables ne
 Next simply run the migration script using Docker:
 
 ```bash
-docker run -it --rm --env-file settings.env openlmis/obscure-data
+docker run --rm --env-file settings.env openlmis/requisition-template-migration
 ```
 
 That's it - the migration will run and give you output about its progress.
